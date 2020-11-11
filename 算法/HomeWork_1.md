@@ -1,8 +1,13 @@
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
+</script>
+
 # <div align = "center">算法设计HomeWork_1</div>
 
 ## <div align = "center">ZY2006109_姬轶</div>
 
-### 一、已知下列递推式：
+#### 一、已知下列递推式：
 $$
 \begin{aligned}
 C(n) = \begin{cases}
@@ -48,7 +53,7 @@ $\quad\therefore C(n)$的渐进复杂性为$O(nlog_2n)$。
 
 </br>
 
-### 二、由于 Prim 算法和 Kruskal 算法设计思路的不同，导致了其对不同问题实例的效率对比关系的不同。请简要论述：
+#### 二、由于 Prim 算法和 Kruskal 算法设计思路的不同，导致了其对不同问题实例的效率对比关系的不同。请简要论述：
 1、如何将两种算法集成，以适应问题的不同实例输入；</br>
 2、你如何评价这一集成的意义？
 > 解：1、Prim算法基于点找出有权重的图中的最小生成树，其时间复杂度为$O(n^2)$。与图中边数无关，适合于稠密图。</br>
@@ -58,7 +63,7 @@ $\quad\therefore C(n)$的渐进复杂性为$O(nlog_2n)$。
 
 </br>
 
-### 三、分析以下生成排列算法的正确性和时间效率：
+#### 三、分析以下生成排列算法的正确性和时间效率：
 ```java
 HeapPermute(n)
 //实现生成排列的 Heap 算法
@@ -110,7 +115,7 @@ C(n) &= \begin{cases}
 
 </br>
 
-### 四、对于求$n$个实数构成的数组中最小元素的位置问题，写出你设计的具有减治思想算法的伪代码，确定其时间效率，并与该问题的蛮力算法相比较。
+#### 四、对于求$n$个实数构成的数组中最小元素的位置问题，写出你设计的具有减治思想算法的伪代码，确定其时间效率，并与该问题的蛮力算法相比较。
 
 > 解：先找出最小元素，而后在原数组中进行位置匹配。</br>
 > &emsp;&emsp;算法：利用快排思想，以第一个元素为基准进行快排的第一步操作，若该元素下标为0，则是最小元素，若不是，则对左半部分继续进行同种操作，直至找到最小元素，而后在元素组查找该元素的位置。</br>
@@ -137,9 +142,49 @@ C(n) &= \begin{cases}
 &=2n-\frac{n}{2^{n-1}} \\
 \end{aligned} \\
 > $$
-> $\therefore$ 算法时间复杂度为$O(\frac{5n}{2}-\frac{n}{2^{n-1}})$，比蛮力法的时间复杂度$O(n)$要高，同时，也比蛮力法使用了更多的空间，主要原因在于减治思想增加了元素间的比较次数，同时也占用了额外的$temp$存储基准数。
+> &emsp;&emsp;$\therefore$ 算法时间复杂度为$O(\frac{5n}{2}-\frac{n}{2^{n-1}})$，比蛮力法的时间复杂度$O(n)$要高，同时，也比蛮力法使用了更多的空间，主要原因在于减治思想增加了元素间的比较次数，同时也占用了额外的$temp$存储基准数。
 
 </br>
 
-### 五、请给出约瑟夫斯问题的非递推公式$J(n)$，并证明之。其中，$n$为最初总人数，$J(n)$为最后幸存者的最初编号。
-> 解：
+#### 五、请给出约瑟夫斯问题的非递推公式$J(n)$，并证明之。其中，$n$为最初总人数，$J(n)$为最后幸存者的最初编号。
+> 解：不妨设约瑟夫斯问题中$m=2$，对前16种情况进行简单分析可得：</br>
+> |n|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|
+> |:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+> |J(n)|1|1|3|1|3|5|7|1|3|5|7|9|11|13|15|1|
+> &emsp;&emsp;当$n=1$时，此时有$J(n)=1$;</br>
+> &emsp;&emsp;当$n$为偶数时，不妨设$n=2k$，此时有$J(2k)=2J(k)-1$;</br>
+> &emsp;&emsp;当$n$为奇数时，不妨设$n=2k+1$，此时有$J(2k+1)=2J(k)+1$;</br>
+> &emsp;&emsp;可以简化为以下形式：
+> $$
+\begin{aligned}
+J(n) = \begin{cases}
+    1 & 若\ n = 1 \\
+    2J(\lfloor n/2\rfloor) +n\%2*2-1 & 若\ n \geq 2
+\end{cases}
+\end{aligned}
+> $$
+> 
+> &emsp;&emsp;由上述情况寻找规律，不妨将$n$表示成$n=2^m+l$的形式，其中，$m$为不超过$n$的最大幂次项，此时猜测有$J(n)=2l+1$，其中$l=n-2^{\lfloor log_2n \rfloor}$。</br>
+> &emsp;&emsp;**数学归纳法**：$n=1$ 时：$J(n)=1$ 成立。</br>
+> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;$n=2k$ 时：假设$J(2k)=2J(k)-1$成立</br>
+> $$
+\begin{aligned}
+J(2k)&=2J(k)-1 \\
+&=2(2(k-2^{\lfloor log_2k \rfloor+2})+1)-1 \\
+&=2(2k-2^{\lfloor log_22k \rfloor+1})+1 \\
+&=2l+1 \\
+推论成立
+\end{aligned}
+> $$
+> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;$n=2k+1$ 时：假设$J(2k+1)=2J(k)+1$成立</br>
+> $$
+\begin{aligned}
+J(2k+1)&=2J(k)+1 \\
+&=2(2(k-2^{\lfloor log_2k \rfloor+2})+1)+1 \\
+&=2((2k+1)-2^{\lfloor log_22k+1 \rfloor+1})+1 \\
+&=2l+1 \\
+推论成立
+\end{aligned}
+> $$
+> &emsp;&emsp;综上所述，约瑟夫问题的非递推公式$J(n)=2l+1$，其中$l=n-2^{\lfloor log_2n \rfloor}$。</br>
+> &emsp;&emsp;即$J(n)=2n-2^{\lfloor log_2n \rfloor+1}+1$.
