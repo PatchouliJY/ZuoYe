@@ -107,11 +107,13 @@ C(n) &= \begin{cases}
     n(C(n-1) + 1) & 若\ n \geq 2
 \end{cases} \\
 \therefore C(n) &= n!+(n+n(n-1)+n(n-1)(n-2)+···+n!) \\
+&= n!+(1^2+2^2+···+n^2) \\
+&= n!+\frac{n(n+1)(2n+1)}{3}
 \end{aligned} \\
-\lim\limits_{x\rightarrow\infty}C(n) = 2n!
+\lim\limits_{x\rightarrow\infty}C(n) = n!
 > $$
 > 
-> &emsp;&emsp;所以该生成算法的渐近时间复杂度为$O(2n!)。$
+> &emsp;&emsp;所以该生成算法的渐近时间复杂度为$O(n!)。$
 
 </br>
 
