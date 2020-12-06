@@ -225,4 +225,65 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;要求：写出递推关系式、伪代码和程序相关说明，并分析时间复杂性。
 
 > 解：
-> $\quad$设$v_1,v_a,...,v_e,v_1$为满足题意的最短路径，假设$v_e,v_1$已经确定时，问题暂时转化为求$v_1$到$v_e$的最短路径
+> $\quad$设$v_1,v_a,...,v_e,v_1$为满足题意的最短路径，假设$v_e,v_1$已经确定时，问题暂时转化为求$v_1$到$v_e$的最短路径问题。
+> $\quad$我们定义$C(V,v_i)$，表示从点$v_1$出发，访问过$V\subseteq\{v_2,v_3,...,v_n\}$最后停留在$v_i$时的最短路径长度。
+> $\quad$当$V$中没有城市时，有$C(v_1,v_1)=0$。
+> $\quad$当$V$中仅有一个城市$v_2$时，有$C(v_1,v_i)=d(v_1,v_2)$。
+> $\quad$状态转移方程也就为（$v_j \in V$）：
+> $$
+> C(V,v_i)=min\{C(V-\{v_i\},v_j)+d(v_j,v_i)\}
+> $$ $\quad$最优解即为（$V=\{v_2,v_3,...,v_n\}$）：
+> $$
+> min\{C(V,v_i)+d(v_i,v_1)\}
+> $$ $\quad$伪代码如下所示：
+> ```scala
+> 输入：城市数n和相应的距离矩阵
+> 输出：最短距离和相应的路径
+> function TSP(v, reach):
+>     if dp[v][reach] != -1 then
+>          return dp[v][reach]
+>     endif
+>     if v == (1 << n) THEN
+>         return dist[0][reach]
+>     endif
+>     # 初始最长路径设置为999999999
+>     sumpath <- 999999999
+>     for var i to n by 1 do
+>         # 取出整数v在二进制表示下的第i位，表示经过城市V中的vi
+>         if v & (1 << i) then
+>             m <- TSP(v & (~(1 << i)), i) + dist[i][reach]
+>             # 更新最短路径长度，保存路径
+>             if m < sumpath then
+>                 sumpath <- m
+>                 path[v][reach] <- i
+>             endif
+>         endif
+>     endfor
+>     dp[v][reach] <- sumpath
+>     return dp[v][reach]
+> endfunction
+> 
+> if __name__ == "__main__" then
+>     if n == 1 then
+>         print('最短距离为：0')
+>         print('最短路径为：1->', end='')
+>     else:
+>         # 起点为v1
+>         reach_point <- 0
+>         # 二进制表示经过城市，初始状态全为1，表示所有城市都经过
+>         s <- 2**(n + 1) - 2
+>         do TSP(s, reach_point)
+>         reach <- 0
+>         print('最短距离为：' + str(distance))
+>         print('最短路径为：1->', end='')
+>         for var num to n-1 by 1 do
+>             reach <- int(path[s][reach])
+>             print(str(reach + 1) + '->', end='')
+>             # 在路径中去掉该已达城市
+>             s <- s & (~(1 << reach))
+>         endfor
+>     endif
+> ```
+> $\quad$算法流程图：<div align=center><img src="TSPChart.png"/></div>
+> > $\quad$具体设计采用动态压缩的思想，使用二进制位运算代替多维数组存储各路径状态，0代表未经过的城市，1代表已经经过的城市，通过位运算可以获得下一个城市节点，例如$v\& (1<<i)$可以表示取出$V$中已存在的城市$v_i$。
+> $\quad$分析复杂度：对于n个城市，我们有$O(2^n·n)$种状态，对于每种状态，状态转移的复杂度为$O(n)$，故算法的整体时间复杂度为$O(2^n·n^2)$。
